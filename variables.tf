@@ -9,11 +9,6 @@ variable "instances" {
   type        = map
 }
 
-variable "vpc_id" {
-  description = "VPC ID"
-  type        = string
-}
-
 variable "subnets" {
   description = "Subnets"
   type        = map
@@ -21,10 +16,5 @@ variable "subnets" {
 
 variable "security_groups" {
   description = "Secutiry groups"
-  type        = map
-}
-
-variable "key_pairs" {
-  description = "Key pairs"
   type        = map
 }
