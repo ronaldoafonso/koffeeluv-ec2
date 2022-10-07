@@ -12,3 +12,39 @@ resource "aws_instance" "instances" {
     Environment = var.environment
   }
 }
+
+resource "aws_lb" "lb" {
+  name               = var.lb.name
+  internal           = var.lb.internal
+  load_balancer_type = var.lb.load_balancer_type
+  security_groups    = var.lb.security_group_ids
+  subnets            = var.lb.subnet_ids
+
+  tags = {
+    Name        = var.lb.name
+    Environment = var.environment
+  }
+}
+
+resource "aws_lb_listener" "lb_listener" {
+  load_balancer_arn = aws_lb.lb.arn
+  port              = var.lb.listener.port
+  protocol          = var.lb.listener.protocol
+
+  default_action {
+    type             = var.lb.listener.default_action.type
+    target_group_arn = aws_lb_target_group.lb_target_group.arn
+  }
+}
+
+resource "aws_lb_target_group" "lb_target_group" {
+  name        = var.lb.target_group.name
+  port        = var.lb.target_group.port
+  protocol    = var.lb.target_group.protocol
+  vpc_id      = var.lb.target_group.vpc_id
+}
+
+resource "aws_autoscaling_attachment" "autoscaling_attachment" {
+  autoscaling_group_name = var.lb.autoscaling_group.id
+  lb_target_group_arn   = aws_lb_target_group.lb_target_group.arn
+}

@@ -18,3 +18,8 @@ variable "security_groups" {
   description = "Secutiry groups"
   type        = map
 }
+
+variable "lb" {
+  description = "Load Balancer"
+  type        = any
+}
